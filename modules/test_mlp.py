@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 def data_loader():
     # 讀取資料集
-    data = np.loadtxt(r'C:\Users\User\Desktop\NN\HW\HW1\NN_HW1_DataSet\NN_HW1_DataSet\basic\test.txt')
+    data = np.loadtxt(r'C:\Users\User\Desktop\NN\HW\HW1\NCU-NN-HW1\data\basic\2Ccircle1.txt')
     print(data)
 
     X = data[:, :2]  # 前兩列為特徵值（x 和 y 坐標）
@@ -86,48 +86,6 @@ class Perceptron:
 
         return self.activation_function(linear_output)
     
-    # def plot_decision_boundary(self, X, y, ax):
-    #     # 計算決策邊界
-    #     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    #     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    #     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
-
-    #     # 生成網格資料，並進行預測
-    #     grid_points = np.c_[xx.ravel(), yy.ravel()]
-    #     Z = self.predict(grid_points)
-    #     Z = Z.reshape(xx.shape)
-
-    #     # 畫出決策邊界
-    #     ax.contourf(xx, yy, Z, alpha=0.8, cmap=plt.cm.Paired)
-    #     scatter = ax.scatter(X[:, 0], X[:, 1], c=y, marker='o', cmap=plt.cm.Paired, edgecolor='k')
-    #     ax.legend(*scatter.legend_elements(), title="Class")
-    #     ax.set_xlabel('Feature 1')
-    #     ax.set_ylabel('Feature 2')
-    #     ax.set_title("Perceptron Decision Boundary")
-
-    # def plot_decision_boundary(self, X, y, ax):
-    #     # 計算決策邊界範圍
-    #     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    #     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    #     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
-
-    #     # 生成網格資料點，並進行預測
-    #     grid_points = np.c_[xx.ravel(), yy.ravel()]
-    #     Z = self.predict(grid_points)
-    #     Z = Z.reshape(xx.shape)
-
-    #     # 檢查網格點的預測結果，確保顏色與資料對應正確
-    #     print("Decision Boundary Predictions (Z):\n", Z)
-
-    #     # 確保填充的顏色與標籤的顏色一致
-    #     cmap = plt.cm.Paired
-    #     ax.contourf(xx, yy, Z, alpha=0.8, cmap=cmap)
-    #     scatter = ax.scatter(X[:, 0], X[:, 1], c=y, marker='o', cmap=cmap, edgecolor='k')
-    #     ax.legend(*scatter.legend_elements(), title="Class")
-    #     ax.set_xlabel('Feature 1')
-    #     ax.set_ylabel('Feature 2')
-    #     ax.set_title("Perceptron Decision Boundary")
-    
 if __name__ == '__main__':
     X_train, X_test, y_train, y_test = data_loader()
 
@@ -160,7 +118,8 @@ if __name__ == '__main__':
     fig.suptitle(f"Perceptron Model - Train Accuracy: {train_accuracy:.2f}%, Test Accuracy: {test_accuracy:.2f}%")
 
     # 畫訓練集資料點
-    ax[0].scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
+    scatter = ax[0].scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
+    ax[0].legend(*scatter.legend_elements(), title="Class")
     ax[0].set_xlabel('Feature 1')
     ax[0].set_ylabel('Feature 2')
     ax[0].set_title("Training Set")
@@ -175,7 +134,8 @@ if __name__ == '__main__':
     ax[0].plot(x_values, y_values, 'k--')  # 黑色虛線表示決策邊界
 
     # 畫測試集資料點
-    ax[1].scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
+    scatter = ax[1].scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
+    ax[1].legend(*scatter.legend_elements(), title="Class")
     ax[1].set_xlabel('Feature 1')
     ax[1].set_ylabel('Feature 2')
     ax[1].set_title("Test Set")
@@ -183,4 +143,4 @@ if __name__ == '__main__':
     # 在測試集圖中畫出相同的決策邊界
     ax[1].plot(x_values, y_values, 'k--')  # 黑色虛線表示決策邊界
 
-    plt.show()
+    plt.show()  
