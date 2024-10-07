@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import ListedColormap
 from sklearn.model_selection import train_test_split
 
 
@@ -104,30 +105,29 @@ class Perceptron:
     #     ax.set_ylabel('Feature 2')
     #     ax.set_title("Perceptron Decision Boundary")
 
-    def plot_decision_boundary(self, X, y, ax):
-        # 計算決策邊界範圍
-        x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-        y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-        xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
+    # def plot_decision_boundary(self, X, y, ax):
+    #     # 計算決策邊界範圍
+    #     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    #     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    #     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
 
-        # 生成網格資料點，並進行預測
-        grid_points = np.c_[xx.ravel(), yy.ravel()]
-        Z = self.predict(grid_points)
-        Z = Z.reshape(xx.shape)
+    #     # 生成網格資料點，並進行預測
+    #     grid_points = np.c_[xx.ravel(), yy.ravel()]
+    #     Z = self.predict(grid_points)
+    #     Z = Z.reshape(xx.shape)
 
-        # 檢查網格點的預測結果，確保顏色與資料對應正確
-        print("Decision Boundary Predictions (Z):\n", Z)
+    #     # 檢查網格點的預測結果，確保顏色與資料對應正確
+    #     print("Decision Boundary Predictions (Z):\n", Z)
 
-        # 確保填充的顏色與標籤的顏色一致
-        cmap = plt.cm.Paired
-        ax.contourf(xx, yy, Z, alpha=0.8, cmap=cmap)
-        scatter = ax.scatter(X[:, 0], X[:, 1], c=y, marker='o', cmap=cmap, edgecolor='k')
-        ax.legend(*scatter.legend_elements(), title="Class")
-        ax.set_xlabel('Feature 1')
-        ax.set_ylabel('Feature 2')
-        ax.set_title("Perceptron Decision Boundary")
+    #     # 確保填充的顏色與標籤的顏色一致
+    #     cmap = plt.cm.Paired
+    #     ax.contourf(xx, yy, Z, alpha=0.8, cmap=cmap)
+    #     scatter = ax.scatter(X[:, 0], X[:, 1], c=y, marker='o', cmap=cmap, edgecolor='k')
+    #     ax.legend(*scatter.legend_elements(), title="Class")
+    #     ax.set_xlabel('Feature 1')
+    #     ax.set_ylabel('Feature 2')
+    #     ax.set_title("Perceptron Decision Boundary")
     
-
 if __name__ == '__main__':
     X_train, X_test, y_train, y_test = data_loader()
 
@@ -155,26 +155,32 @@ if __name__ == '__main__':
     print(f"訓練集準確率: {train_accuracy:.2f}%")
     print(f"測試集準確率: {test_accuracy:.2f}%")
 
-    # # 視覺化訓練結果與測試結果
-    # def plot_decision_boundary(X, y, model, ax):
-    #     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    #     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    #     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
-    #     Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
-    #     Z = Z.reshape(xx.shape)
-    #     ax.contourf(xx, yy, Z, alpha=0.8, cmap=plt.cm.Paired)
-    #     scatter = ax.scatter(X[:, 0], X[:, 1], c=y, marker='o', cmap=plt.cm.Paired, edgecolor='k')
-    #     ax.legend(*scatter.legend_elements(), title="Class")
-
+    # 使用訓練好的權重來繪製決策邊界
     fig, ax = plt.subplots(1, 2, figsize=(14, 6))
     fig.suptitle(f"Perceptron Model - Train Accuracy: {train_accuracy:.2f}%, Test Accuracy: {test_accuracy:.2f}%")
 
-    # 畫訓練集資料點與分類結果
+    # 畫訓練集資料點
+    ax[0].scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
+    ax[0].set_xlabel('Feature 1')
+    ax[0].set_ylabel('Feature 2')
     ax[0].set_title("Training Set")
-    perceptron.plot_decision_boundary(X_train, y_train, ax[0])
 
-    # 畫測試集資料點與分類結果
+    # 畫決策邊界
+    x_min, x_max = X_train[:, 0].min() - 1, X_train[:, 0].max() + 1
+    x_values = np.linspace(x_min, x_max, 100)
+    # 透過決策邊界公式計算 x_2 的值
+    w0, w1, w2 = perceptron.weights  # 假設 weights = [bias, w1, w2]
+    y_values = (w0 - w1 * x_values) / w2
+
+    ax[0].plot(x_values, y_values, 'k--')  # 黑色虛線表示決策邊界
+
+    # 畫測試集資料點
+    ax[1].scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
+    ax[1].set_xlabel('Feature 1')
+    ax[1].set_ylabel('Feature 2')
     ax[1].set_title("Test Set")
-    perceptron.plot_decision_boundary(X_test, y_test, ax[1])
+
+    # 在測試集圖中畫出相同的決策邊界
+    ax[1].plot(x_values, y_values, 'k--')  # 黑色虛線表示決策邊界
 
     plt.show()
