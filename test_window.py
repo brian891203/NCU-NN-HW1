@@ -134,7 +134,7 @@ class Gray_scale_histogram_window(tk.Tk):
 
         # Content_frame10 contains canva_histogram
         self.Content_frame_10 = tk.Frame(self.Content_subframe2, padx=10, pady=20, bg='white')
-        self.Content_frame_10.grid(row=1, column=0, padx=10, pady=0)
+        self.Content_frame_10.grid(row=0, column=1, padx=10, pady=0)
 
         self.canvas_histogram = tk.Canvas(self.Content_frame_10, width=500, height=200, bg='white', highlightthickness=0)
         self.canvas_histogram.grid(row=0, column=0)
