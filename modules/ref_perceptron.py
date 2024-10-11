@@ -7,6 +7,7 @@ Created on Sun Oct 15 03:32:40 2023
 
 import numpy as np
 
+
 class Perceptron:
     def __init__(self):
         self.train_x = None
@@ -21,20 +22,20 @@ class Perceptron:
         self.dim_3 = data[4]
         
     def set_model(self, input_dim, hidden_dim, output_dim):
-       # np.random.seed(42)
-       self.input_dim = input_dim
-       self.hidden_dim = hidden_dim
-       self.output_dim = output_dim
-       self.num_layers = 2
-       self.weights = {
-           'W1': np.random.randn(hidden_dim, input_dim),
-           'W2': np.random.randn(output_dim, hidden_dim)
-       }
-       self.biases = {
-           'b1': np.zeros(hidden_dim),
-           'b2': np.zeros(output_dim)
-       }
-       # print(self.weights,self.biases)
+        # np.random.seed(42)
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.output_dim = output_dim
+        self.num_layers = 2
+        self.weights = {
+            'W1': np.random.randn(hidden_dim, input_dim),
+            'W2': np.random.randn(output_dim, hidden_dim)
+        }
+        self.biases = {
+            'b1': np.zeros(hidden_dim),
+            'b2': np.zeros(output_dim)
+        }
+        # print(self.weights,self.biases)
     
     def forward(self, x):
         # 前向传播
