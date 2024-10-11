@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 # 資料加載函數
 def data_loader():
     # 讀取資料集
-    data = np.loadtxt(r'C:\Users\User\Desktop\NN\HW\HW1\NCU-NN-HW1\data\basic\2CloseS2.txt')
+    data = np.loadtxt(r'C:\Users\User\Desktop\NN\HW\HW1\NCU-NN-HW1\data\basic\perceptron2.txt')
     print("Loaded data:\n", data)
 
     X = data[:, :-1]  # 最後一列為標籤，前面所有列為特徵值
@@ -42,21 +42,57 @@ class Perceptron:
         self.weights = np.insert(self.weights, 0, self.bias, axis=None)
         self.weights = self.weights.astype(np.float64)
 
+        # # 訓練感知機
+        # for epoch in range(self.epochs):
+        #     for idx, x_i in enumerate(X):
+        #         # 插入偏置項到輸入向量
+        #         x_i = np.insert(x_i, 0, -1, axis=None)
+        #         x_i = x_i.astype(np.float64)
+
+        #         # 預測輸出
+        #         linear_output = np.dot(x_i, self.weights)
+        #         y_pred = self.activation_function(linear_output)
+
+        #         # 若預測錯誤則更新權重
+        #         if y_pred != y[idx]:
+        #             update = self.learning_rate * y[idx]
+        #             self.weights += update * x_i  # 更新權重
+
+        #     print("weights:", self.weights)
+
         # 訓練感知機
         for epoch in range(self.epochs):
+            print(f"======= Epoch {epoch} ========")
             for idx, x_i in enumerate(X):
-                # 插入偏置項到輸入向量
+                print(f"n = {idx} ===")
                 x_i = np.insert(x_i, 0, -1, axis=None)
                 x_i = x_i.astype(np.float64)
+
+                print("weights : ", self.weights)
+                print(f"x_{idx} : ", x_i)
 
                 # 預測輸出
                 linear_output = np.dot(x_i, self.weights)
                 y_pred = self.activation_function(linear_output)
 
-                # 若預測錯誤則更新權重
-                if y_pred != y[idx]:
-                    update = self.learning_rate * y[idx]
-                    self.weights += update * x_i  # 更新權重
+                print("y_pred : ", y_pred)
+                print("y_truth : ", y[idx])
+
+                # 更新規則
+                print("result of prediction ===")
+                if y_pred == y[idx]:
+                    print("prediction is correct")
+                    print("weights", self.weights)
+                    print("bias", self.bias)
+                    continue
+                else:
+                    print("prediction is not correct")
+                    update = self.learning_rate * y[idx]  # == learning_rate * yi(Ground truth of y)
+                    self.weights += update * x_i
+
+                    print("update", update)
+                    print("weights", self.weights)
+                    print("bias", self.bias)
 
     def activation_function(self, v):
         return np.where(v >= 0, 1, -1)
@@ -73,7 +109,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = data_loader()
 
     # 使用原始多維資料進行感知機訓練（不降維）
-    perceptron = Perceptron(learning_rate=0.8, epochs=100)
+    perceptron = Perceptron(learning_rate=0.8, epochs=10)
     perceptron.train(X_train, y_train)
 
     # 預測訓練集和測試集的結果

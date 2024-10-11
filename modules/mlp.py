@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 def data_loader(filepath):
     # 讀取資料集
     data = np.loadtxt(filepath)
-    print("Loaded data:\n", data)
+    # print("Loaded data:\n", data)
 
     X = data[:, :-1]  # 最後一列為標籤，前面所有列為特徵值
     y = data[:, -1]   # 最後一列為標籤（1 或 2）
@@ -57,6 +57,9 @@ class Perceptron:
                 if y_pred != y[idx]:
                     update = self.learning_rate * y[idx]
                     self.weights += update * x_i  # 更新權重
+        
+        print("weights:", self.weights)
+        # return self.weights
 
     def activation_function(self, v):
         return np.where(v >= 0, 1, -1)
@@ -89,8 +92,8 @@ def plot_decision_boundary(perceptron, X_train, y_train, X_test, y_test, canvas,
     ax.clear()
     ax.contourf(xx, yy, Z, alpha=0.8, cmap=ListedColormap(['lightblue', 'orange']))
     scatter = ax.scatter(X_train_pca[:, 0], X_train_pca[:, 1], c=y_train, cmap=ListedColormap(['lightblue', 'orange']), edgecolor='k')
-    ax.set_xlabel('Principal Component 1')
-    ax.set_ylabel('Principal Component 2')
+    # ax.set_xlabel('Principal Component 1')
+    # ax.set_ylabel('Principal Component 2')
     ax.set_title("Perceptron Decision Boundary")
 
     # 畫決策邊界
