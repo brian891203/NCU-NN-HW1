@@ -19,23 +19,23 @@ class Perceptron:
     def set_data(self, data):
         self.train_x, self.train_y = data[0], data[1]
         self.test_x, self.test_y = data[2], data[3]
-        self.dim_3 = data[4]
+        # self.dim_3 = data[4]
         
     def set_model(self, input_dim, hidden_dim, output_dim):
-        # np.random.seed(42)
-        self.input_dim = input_dim
-        self.hidden_dim = hidden_dim
-        self.output_dim = output_dim
-        self.num_layers = 2
-        self.weights = {
-            'W1': np.random.randn(hidden_dim, input_dim),
-            'W2': np.random.randn(output_dim, hidden_dim)
-        }
-        self.biases = {
-            'b1': np.zeros(hidden_dim),
-            'b2': np.zeros(output_dim)
-        }
-        # print(self.weights,self.biases)
+       # np.random.seed(42)
+       self.input_dim = input_dim
+       self.hidden_dim = hidden_dim
+       self.output_dim = output_dim
+       self.num_layers = 2
+       self.weights = {
+           'W1': np.random.randn(hidden_dim, input_dim),
+           'W2': np.random.randn(output_dim, hidden_dim)
+       }
+       self.biases = {
+           'b1': np.zeros(hidden_dim),
+           'b2': np.zeros(output_dim)
+       }
+       # print(self.weights,self.biases)
     
     def forward(self, x):
         # 前向传播
@@ -69,7 +69,7 @@ class Perceptron:
         db1 = dz1
         return loss, {'W1': dW1, 'b1': db1, 'W2': dW2, 'b2': db2}
     
-    def train(self, epochs, lr):
+    def train(self, epochs=100, lr=0.1):
         self.loss_record = []
         for epoch in range(1,epochs+1):
             total_loss = 0
