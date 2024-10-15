@@ -45,6 +45,7 @@ class Perceptron:
         return loss, {'W1': dW1, 'b1': db1, 'W2': dW2, 'b2': db2}
 
     def train(self, epochs=100, learning_rate=0.01):
+        self.loss_record = []
         for epoch in range(1, epochs + 1):
             total_loss = 0
             for i in range(self.train_x.shape[0]):

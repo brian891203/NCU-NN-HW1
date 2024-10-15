@@ -59,9 +59,9 @@ def plot_2D(fig_train, fig_test, model):
     # Use seaborn to generate legend
     ax_train.legend(handles_train, class_labels_train, title="Class Labels", frameon=True, fancybox=True, shadow=True)
 
-    ax_train.set_title('Training Set Decision Boundary', fontsize=14)
-    ax_train.set_xlabel('Feature 1')
-    ax_train.set_ylabel('Feature 2')
+    # ax_train.set_title('Training Set Decision Boundary', fontsize=14)
+    # ax_train.set_xlabel('Feature 1')
+    # ax_train.set_ylabel('Feature 2')
 
     # Plot test data
     colors_test = np.argmax(model.test_y, axis=1)
@@ -86,9 +86,9 @@ def plot_2D(fig_train, fig_test, model):
     
     ax_test.legend(handles_test, class_labels_test, title="Class Labels", frameon=True, fancybox=True, shadow=True)
 
-    ax_test.set_title('Test Set Decision Boundary', fontsize=14)
-    ax_test.set_xlabel('Feature 1')
-    ax_test.set_ylabel('Feature 2')
+    # ax_test.set_title('Test Set Decision Boundary', fontsize=14)
+    # ax_test.set_xlabel('Feature 1')
+    # ax_test.set_ylabel('Feature 2')
 
     return fig_train, fig_test
 
@@ -168,13 +168,21 @@ def plot_surface_decision_boundary(ax, data, model):
     ax.plot_surface(xx, yy, y_pred, cmap=palette, alpha=0.3)
 
 def plot_loss_curve(model, fig_loss):
+    # Clear the previous plot (if any)
+    fig_loss.clf()  
     ax_loss = fig_loss.add_subplot(111)
-    ax_loss.clear()
-    ax_loss.plot(range(1,len(model.loss_record)+1),model.loss_record, label='Training Loss')
     
-    ax_loss.set_xlabel('epochs')
-    ax_loss.set_ylabel('loss')
+    # Plot the loss data
+    ax_loss.plot(range(1, len(model.loss_record) + 1), model.loss_record, label='Training Loss')
+    
+    # Set plot labels, grid, and legend
+    ax_loss.set_xlabel('Epochs')
+    ax_loss.set_ylabel('Loss')
     ax_loss.grid(True)
     ax_loss.legend()
 
+    # Adjust layout to prevent label cutoff
+    fig_loss.tight_layout()  # This will make sure that the labels fit within the figure
+
+    # Return the updated figure
     return fig_loss

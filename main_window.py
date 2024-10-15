@@ -1,3 +1,4 @@
+import os
 import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -47,57 +48,90 @@ class main_window(tk.Tk):
         self.Content_mainframe.pack(padx=0, pady=20)
 
         # sub1_component00 contains canvas1 for Training data
+        label_training = tk.Label(self.Content_mainframe, text="Training Result", bg='white', anchor=tk.W)
+        label_training.grid(row=0, column=0, padx=5, pady=0)
         self.sub1_component00 = tk.Frame(self.Content_mainframe, padx=10, pady=0, bg='white')
-        self.sub1_component00.grid(row=0, column=0, padx=5, pady=0)
-        self.canvas1 = tk.Canvas(self.sub1_component00, width=350, height=300, bg='white', highlightthickness=1, relief='solid')
+        self.sub1_component00.grid(row=1, column=0, padx=5, pady=0)
+        self.canvas1 = tk.Canvas(self.sub1_component00, width=350, height=300, bg='white', highlightthickness=0, relief='solid')
         self.canvas1.grid(row=0, column=0)
 
         # sub1_component01 contains canvas2 for Testing data
+        label_testing = tk.Label(self.Content_mainframe, text="Testing Result", bg='white', anchor=tk.W)
+        label_testing.grid(row=0, column=1, padx=5, pady=0)
         self.sub1_component01 = tk.Frame(self.Content_mainframe, padx=10, pady=0, bg='white')
-        self.sub1_component01.grid(row=0, column=1, padx=5, pady=0)
-        self.canvas2 = tk.Canvas(self.sub1_component01, width=350, height=300, bg='white', highlightthickness=1, relief='solid')
+        self.sub1_component01.grid(row=1, column=1, padx=5, pady=0)
+        self.canvas2 = tk.Canvas(self.sub1_component01, width=350, height=300, bg='white', highlightthickness=0, relief='solid')
         self.canvas2.grid(row=0, column=0)
 
         # sub1_component02 contains canvas3 for Learning rate data
+        label_loss = tk.Label(self.Content_mainframe, text="Training Loss", bg='white', anchor=tk.W)
+        label_loss.grid(row=0, column=2, padx=5, pady=0)
         self.sub1_component02 = tk.Frame(self.Content_mainframe, padx=10, pady=0, bg='white')
-        self.sub1_component02.grid(row=0, column=2, padx=5, pady=0)
-        self.canvas3 = tk.Canvas(self.sub1_component02, width=350, height=300, bg='white', highlightthickness=1, relief='solid')
+        self.sub1_component02.grid(row=1, column=2, padx=5, pady=0)
+        self.canvas3 = tk.Canvas(self.sub1_component02, width=350, height=300, bg='white', highlightthickness=0, relief='solid')
         self.canvas3.grid(row=0, column=0)
 
     def Bottom_Bar(self):
-        self.Top_Bar_mainframe = tk.Frame(self, padx=10, pady=20, bg='white')
-        self.Top_Bar_mainframe.pack(padx=0, pady=0)
+        self.Bottom_Bar_mainframe = tk.Frame(self, padx=0, pady=0, bg='white')
+        self.Bottom_Bar_mainframe.place(x=0, y=338, width=1200, height=350)
 
-        self.open_file_button = tk.Button(self.Top_Bar_mainframe, text='File', command=self.open_file_event, width=15, height=2, bg='white')
-        self.open_file_button.grid(row=0, column=0, padx=10, pady=0)
+        self.Bottom_left_frame = tk.Frame(self.Bottom_Bar_mainframe, padx=10, pady=0, bg='white', width=500, height=350)
+        self.Bottom_left_frame.place(x=20, y=0)
 
-        self.flip_img_button = tk.Button(self.Top_Bar_mainframe, text='Training', command=self.train_mlp_event, width=15, height=2, bg='white')
-        self.flip_img_button.grid(row=0, column=1, padx=10, pady=0)
+        self.Bottom_right_frame = tk.Frame(self.Bottom_Bar_mainframe, padx=10, pady=0, bg='white', width=500, height=350)
+        self.Bottom_right_frame.place(x=650, y=0)
 
-        label_learning_rate = tk.Label(self.Top_Bar_mainframe, text="Learning rate :", bg='white', anchor=tk.W)
-        label_learning_rate.grid(row=1, column=1, padx=10, pady=3, sticky=tk.W)
-        self.learning_rate_entry = tk.Entry(self.Top_Bar_mainframe, width=3, highlightthickness=1)
-        self.learning_rate_entry.grid(row=1, column=1, padx=10, pady=3, sticky=tk.E)
+        # Button to open file
+        self.open_file_button = tk.Button(self.Bottom_left_frame, text='Browse', command=self.open_file_event, width=15, height=2, bg='white')
+        self.open_file_button.place(x=10, y=10)  # Use place to position the button within the left frame
 
-        label_epoch = tk.Label(self.Top_Bar_mainframe, text="Epoch :", bg='white', anchor=tk.W)
-        label_epoch.grid(row=2, column=1, padx=10, pady=3, sticky=tk.W)
-        self.epoch_entry = tk.Entry(self.Top_Bar_mainframe, width=3, highlightthickness=1)
-        self.epoch_entry.grid(row=2, column=1, padx=10, pady=3, sticky=tk.E)
+        # Label to display the selected file path
+        self.file_label = tk.Label(self.Bottom_left_frame, text="No file selected", bg='white', anchor='w')
+        self.file_label.place(x=150, y=20)  # Position label using place
 
-        self.show_histogram_button = tk.Button(self.Top_Bar_mainframe, text='Histogram', command=self.show_histogram_event, width=15, height=2, bg='white')
-        self.show_histogram_button.grid(row=0, column=2, padx=10, pady=0)
+        label_learning_rate = tk.Label(self.Bottom_left_frame, text="Learning rate :", bg='white', anchor=tk.W)
+        label_learning_rate.place(x=20, y=80)
+        self.learning_rate_entry = tk.Entry(self.Bottom_left_frame, width=7, highlightthickness=1)
+        self.learning_rate_entry.place(x=150, y=80)
+        self.learning_rate_entry.insert(0, "0.01")  # Default value for learning rate
 
-        self.save_img_button = tk.Button(self.Top_Bar_mainframe, text='Save', command=self.save_img_event, width=15, height=2, bg='white')
-        self.save_img_button.grid(row=0, column=3, padx=10, pady=0)
+        label_epoch = tk.Label(self.Bottom_left_frame, text="Epoch :", bg='white', anchor=tk.W)
+        label_epoch.place(x=20, y=140)
+        self.epoch_entry = tk.Entry(self.Bottom_left_frame, width=7, highlightthickness=1)
+        self.epoch_entry.place(x=150, y=140)
+        self.epoch_entry.insert(0, "100")  # Default value for epoch counts
+
+        self.flip_img_button = tk.Button(self.Bottom_left_frame, text='Training', command=self.train_mlp_event, width=15, height=2, bg='white')
+        self.flip_img_button.place(x=10, y=250)
+
+        # Training Accuracy
+        label_train_acc = tk.Label(self.Bottom_right_frame, text="Training Accuracy :", bg='white', anchor=tk.W)
+        label_train_acc.place(x=10, y=20)
+        self.train_acc_label = tk.Label(self.Bottom_right_frame, text="N/A", bg='white', anchor=tk.W)
+        self.train_acc_label.place(x=150, y=20)
+
+        # Testing Accuracy
+        label_test_acc = tk.Label(self.Bottom_right_frame, text="Testing Accuracy :", bg='white', anchor=tk.W)
+        label_test_acc.place(x=10, y=60)
+        self.test_acc_label = tk.Label(self.Bottom_right_frame, text="N/A", bg='white', anchor=tk.W)
+        self.test_acc_label.place(x=150, y=60)
+
+        # Weights Display
+        label_weights = tk.Label(self.Bottom_right_frame, text="Weights:", bg='white', anchor=tk.W)
+        label_weights.place(x=10, y=100)
+
+        self.weights_text = tk.Text(self.Bottom_right_frame, width=50, height=12, highlightthickness=2)
+        self.weights_text.place(x=15, y=130)
         
     def open_file_event(self):
         # 開啟檔案並讀取資料
         file_path = filedialog.askopenfilename(initialdir="./", filetypes=[("Text Files", "*.txt *.TXT")])
         if file_path:
+            self.file_label.config(text=os.path.basename(file_path))
             data = self.data_processor.load_data(file_path)
-            print(data)
+            # print(data)
             self.model.set_data(data)
-            self.fig_train, self.fig_test, self.fig_loss = plt.figure(figsize=(3.5, 3)), plt.figure(figsize=(3.5, 3)), plt.figure(figsize=(3.5, 3))
+            self.fig_train, self.fig_test, self.fig_loss = plt.figure(figsize=(3.5, 3)), plt.figure(figsize=(3.5, 3)), plt.figure(figsize=(3.5, 2.5))
 
         else:
             tk.messagebox.showerror("Error", "No file selected..")
@@ -124,6 +158,20 @@ class main_window(tk.Tk):
             self.display_canvas(self.canvas2, self.fig_test, "canvas_widget_test")
             self.display_canvas(self.canvas3, self.fig_loss, "canvas_widget_loss")
 
+            # Update accuracy labels
+            train_accuracy = self.model.evaluate(self.model.train_x, self.model.train_y)
+            test_accuracy = self.model.evaluate(self.model.test_x, self.model.test_y)
+            self.train_acc_label.config(text=f"{train_accuracy*100:.2f}%")
+            self.test_acc_label.config(text=f"{test_accuracy*100:.2f}%")
+
+            weights_info = ""
+            for layer, weight in self.model.weights.items():
+                weights_info += f"{layer}: {weight}\n"
+            self.weights_text.delete(1.0, tk.END)  # Clear previous content
+            self.weights_text.insert(tk.END, weights_info)
+        else:
+            tk.messagebox.showerror("Error", "No data loaded. Please open a file first.")
+
     def display_canvas(self, canvas, fig, canvas_widget_name):
         """Display a figure on the given canvas."""
         # Clear previous canvas if exists
@@ -138,8 +186,6 @@ class main_window(tk.Tk):
         # Store the new canvas widget
         setattr(self, canvas_widget_name, canvas_widget)
 
-
-    
     def save_img_event(self):
         if self.img is not None:
             file_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG files", "*.jpg"), ("All Files", "*.*")])
