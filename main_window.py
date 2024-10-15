@@ -138,16 +138,16 @@ class main_window(tk.Tk):
 
     def train_mlp_event(self):
         """train the MLP"""
-        if self.model.train_x is not None: 
-            input_dim = self.model.train_x.shape[1]
-            output_dim = self.model.train_y.shape[1]
+        if self.model.train_inputs is not None: 
+            input_dim = self.model.train_inputs.shape[1]
+            output_dim = self.model.train_labels.shape[1]
             self.model.set_model(input_dim=input_dim, hidden_dim=16, output_dim=output_dim)
             learning_rate = float(self.learning_rate_entry.get())
             epochs = int(self.epoch_entry.get())
             self.model.train(learning_rate=learning_rate, epochs=epochs)
 
             # Plotting the figures
-            if self.model.train_y.shape[1] == 2:
+            if self.model.train_labels.shape[1] == 2:
                 self.fig_train, self.fig_test = plot_2D(self.fig_train, self.fig_test, self.model)
             else:
                 self.fig_train, self.fig_test = plot_3D(self.fig_train, self.fig_test, self.model)
@@ -159,8 +159,8 @@ class main_window(tk.Tk):
             self.display_canvas(self.canvas3, self.fig_loss, "canvas_widget_loss")
 
             # Update accuracy labels
-            train_accuracy = self.model.evaluate(self.model.train_x, self.model.train_y)
-            test_accuracy = self.model.evaluate(self.model.test_x, self.model.test_y)
+            train_accuracy = self.model.evaluate(self.model.train_inputs, self.model.train_labels)
+            test_accuracy = self.model.evaluate(self.model.test_inputs, self.model.test_labels)
             self.train_acc_label.config(text=f"{train_accuracy*100:.2f}%")
             self.test_acc_label.config(text=f"{test_accuracy*100:.2f}%")
 

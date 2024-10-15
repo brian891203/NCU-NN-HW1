@@ -33,16 +33,16 @@ def plot_2D(fig_train, fig_test, model):
     ax_test = fig_test.add_subplot(111)
 
     # Plot training data
-    colors_train = np.argmax(model.train_y, axis=1)
+    colors_train = np.argmax(model.train_labels, axis=1)
     
     # Use seaborn color palette to plot scatter plot
-    scatter_train = ax_train.scatter(model.train_x[:, 0], model.train_x[:, 1], 
+    scatter_train = ax_train.scatter(model.train_inputs[:, 0], model.train_inputs[:, 1], 
                                      c=colors_train, cmap="flare", 
                                      edgecolor='k', s=40, alpha=0.8, label='Train Data')
     
     # Plot decision boundary for training set
-    x_min, x_max = model.train_x[:, 0].min() - 0.1, model.train_x[:, 0].max() + 0.1
-    y_min, y_max = model.train_x[:, 1].min() - 0.1, model.train_x[:, 1].max() + 0.1
+    x_min, x_max = model.train_inputs[:, 0].min() - 0.1, model.train_inputs[:, 0].max() + 0.1
+    y_min, y_max = model.train_inputs[:, 1].min() - 0.1, model.train_inputs[:, 1].max() + 0.1
     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 200), np.linspace(y_min, y_max, 200))
     
     x_in = np.c_[xx.ravel(), yy.ravel()]
@@ -52,7 +52,7 @@ def plot_2D(fig_train, fig_test, model):
 
     decision_surface_train = ax_train.contourf(xx, yy, y_pred, cmap="flare", alpha=0.5)
 
-    num_classes = model.train_y.shape[1]  # Dynamically calculate number of classes
+    num_classes = model.train_labels.shape[1]  # Dynamically calculate number of classes
     class_labels_train = [f"Class {i}" for i in range(num_classes)]
     handles_train, labels_train = scatter_train.legend_elements()
     
@@ -64,13 +64,13 @@ def plot_2D(fig_train, fig_test, model):
     # ax_train.set_ylabel('Feature 2')
 
     # Plot test data
-    colors_test = np.argmax(model.test_y, axis=1)
-    scatter_test = ax_test.scatter(model.test_x[:, 0], model.test_x[:, 1], 
+    colors_test = np.argmax(model.test_labels, axis=1)
+    scatter_test = ax_test.scatter(model.test_inputs[:, 0], model.test_inputs[:, 1], 
                                    c=colors_test, cmap="flare", 
                                    edgecolor='k', s=40, alpha=0.8, label='Test Data')
     
-    x_min, x_max = model.test_x[:, 0].min() - 0.1, model.test_x[:, 0].max() + 0.1
-    y_min, y_max = model.test_x[:, 1].min() - 0.1, model.test_x[:, 1].max() + 0.1
+    x_min, x_max = model.test_inputs[:, 0].min() - 0.1, model.test_inputs[:, 0].max() + 0.1
+    y_min, y_max = model.test_inputs[:, 1].min() - 0.1, model.test_inputs[:, 1].max() + 0.1
     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
     
     x_in = np.c_[xx.ravel(), yy.ravel()]
@@ -80,7 +80,7 @@ def plot_2D(fig_train, fig_test, model):
 
     decision_surface_test = ax_test.contourf(xx, yy, y_pred, cmap="flare", alpha=0.5)
 
-    num_classes = model.test_y.shape[1]  # Dynamically calculate number of classes
+    num_classes = model.test_labels.shape[1]  # Dynamically calculate number of classes
     class_labels_test = [f"Class {i}" for i in range(num_classes)]
     handles_test, labels_test = scatter_test.legend_elements()
     
@@ -107,12 +107,12 @@ def plot_3D(fig_train, fig_test, model):
     ax_test = fig_test.add_subplot(111, projection='3d')
     
     # Process training data
-    x_train = model.train_x[:, :2]
-    train_y = np.argmax(model.train_y, axis=1)
+    x_train = model.train_inputs[:, :2]
+    train_labels = np.argmax(model.train_labels, axis=1)
     
     # Plot training data points using seaborn color palette
-    scatter_train = ax_train.scatter(x_train[:, 0], x_train[:, 1], train_y, 
-                                     c=train_y, cmap=palette, 
+    scatter_train = ax_train.scatter(x_train[:, 0], x_train[:, 1], train_labels, 
+                                     c=train_labels, cmap=palette, 
                                      edgecolor='black', s=50, alpha=0.8)
     
     # Set 3D plot view angle
@@ -121,18 +121,18 @@ def plot_3D(fig_train, fig_test, model):
     # Compute decision boundary for training set
     plot_surface_decision_boundary(ax_train, x_train, model)
 
-    num_classes = model.train_y.shape[1]  # Dynamically calculate number of classes
+    num_classes = model.train_labels.shape[1]  # Dynamically calculate number of classes
     class_labels_train = [f"Class {i}" for i in range(num_classes)]
     handles_train, labels_train = scatter_train.legend_elements()
     ax_train.legend(handles_train, class_labels_train, title="Class Labels")
 
     # Process test data
-    x_test = model.test_x[:, :2]
-    test_y = np.argmax(model.test_y, axis=1)
+    x_test = model.test_inputs[:, :2]
+    test_labels = np.argmax(model.test_labels, axis=1)
 
     # Plot test data points using seaborn color palette
-    scatter_test = ax_test.scatter(x_test[:, 0], x_test[:, 1], test_y, 
-                                   c=test_y, cmap=palette, 
+    scatter_test = ax_test.scatter(x_test[:, 0], x_test[:, 1], test_labels, 
+                                   c=test_labels, cmap=palette, 
                                    edgecolor='black', s=50, alpha=0.8)
 
     # Set 3D plot view angle
@@ -140,7 +140,7 @@ def plot_3D(fig_train, fig_test, model):
 
     # Compute decision boundary for test set
     plot_surface_decision_boundary(ax_test, x_test, model)
-    num_classes = model.test_y.shape[1]  # Dynamically calculate number of classes
+    num_classes = model.test_labels.shape[1]  # Dynamically calculate number of classes
     class_labels_test = [f"Class {i}" for i in range(num_classes)]
     handles_test, labels_test = scatter_test.legend_elements()
     ax_test.legend(handles_test, class_labels_test, title="Class Labels")
